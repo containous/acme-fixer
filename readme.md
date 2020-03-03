@@ -18,8 +18,8 @@ acme-fixer -i ./my/path/acme.json
 
 ```bash
 # dry run mode
-acme-fixer -i ./my/path/acme.json -d -v2
+acme-fixer -i ./my/path/acme.json -d --v2
 
 # without dry run
-acme-fixer -i ./my/path/acme.json -v2
+acme-fixer -i ./my/path/acme.json --v2
 ```
