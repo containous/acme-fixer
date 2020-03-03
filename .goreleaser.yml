@@ -1,0 +1,54 @@
+project_name: acme-fixer
+
+builds:
+  - binary: acme-fixer
+    ldflags:
+      - -s
+      - -w
+      - -X "acme-fixermain.Version={{ .Env.VERSION }}"
+      - -X "main.BuildDate={{ .Env.DATE }}"
+      - -X "main.ShortCommit={{ .Env.SHA }}"
+    goos:
+      - linux
+      - darwin
+      - windows
+      - freebsd
+      - openbsd
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - 7
+      - 6
+      - 5
+    ignore:
+      - goos: openbsd
+        goarch: arm
+      - goos: freebsd
+        goarch: arm
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^doc:'
+      - '^chore:'
+      - '^chore(deps):'
+      - '^test:'
+      - '^tests:'
+
+archives:
+  - id: aws-mfa
+    name_template: '{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - docs/*.md
+      - LICENSE
+
+checksum:
+  name_template: "{{ .ProjectName }}_v{{ .Version }}_checksums.txt"

@@ -1,2 +1,5 @@
 .idea/
 secret/
+acme-fixer
+bin/
+dist/

@@ -1,0 +1,19 @@
+name: Build
+
+on: [push]
+
+jobs:
+
+  build:
+    strategy:
+      matrix:
+        go: [1.14]
+
+    runs-on: ubuntu-latest
+    container: golang:${{ matrix.go }}-stretch
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Build
+        run: make

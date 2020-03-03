@@ -1,0 +1,50 @@
+[run]
+  timeout = "5m"
+  skip-files = []
+
+[linters-settings]
+
+  [linters-settings.govet]
+    check-shadowing = true
+
+  [linters-settings.gocyclo]
+    min-complexity = 14.0
+
+  [linters-settings.maligned]
+    suggest-new = true
+
+  [linters-settings.goconst]
+    min-len = 3.0
+    min-occurrences = 3.0
+
+  [linters-settings.misspell]
+    locale = "US"
+
+  [linters-settings.funlen]
+    lines = 230 # default 60
+    statements = 120 # default 40
+
+[linters]
+  enable-all = true
+  disable = [
+    "dupl",
+    "maligned",
+    "lll",
+    "prealloc",
+    "gomnd",
+    "bodyclose", # Too many false-positive and panics.
+    "wsl", # Too strict
+  ]
+
+[issues]
+  exclude-use-default = false
+  max-per-linter = 0
+  max-same-issues = 0
+  exclude = [
+      "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked",
+      "should have a package comment, unless it's in another file for this package",
+    ]
+
+  [[issues.exclude-rules]]
+    path = "version.go"
+    text = "`(Version|BuildDate|ShortCommit)` is a global variable"
