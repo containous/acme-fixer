@@ -13,8 +13,10 @@ const successMsg = "The certificate currently available on %s is OK."
 
 // IsSafe check if a domain is safe.
 func IsSafe(domain string, debug bool) (bool, error) {
+	trimmed := strings.TrimPrefix(domain, "*.")
+
 	values := url.Values{}
-	values.Set("fqdn", strings.TrimPrefix(domain, "*."))
+	values.Set("fqdn", trimmed)
 
 	resp, err := http.DefaultClient.PostForm("https://unboundtest.com/caaproblem/checkhost", values)
 	if err != nil {
@@ -35,5 +37,5 @@ func IsSafe(domain string, debug bool) (bool, error) {
 		log.Println("Response:", string(all))
 	}
 
-	return strings.Contains(string(all), fmt.Sprintf(successMsg, domain)), nil
+	return strings.Contains(string(all), fmt.Sprintf(successMsg, trimmed)), nil
 }
