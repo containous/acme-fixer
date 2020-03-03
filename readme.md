@@ -44,8 +44,8 @@ With Docker:
 
 ```bash
 # dry run mode
-docker run -v $PWD/letsencrypt:/letsencrypt containous/acme-fixer:v0.1.0 -i /letsencrypt/acme.json -d --v2
+docker run -v $PWD/letsencrypt:/letsencrypt containous/acme-fixer:v0.1.1 -i /letsencrypt/acme.json -d --v2
 
 # without dry run
-docker run -v $PWD/letsencrypt:/letsencrypt containous/acme-fixer:v0.1.0 -i /letsencrypt/acme.json --v2
+docker run -v $PWD/letsencrypt:/letsencrypt containous/acme-fixer:v0.1.1 -i /letsencrypt/acme.json --v2
 ```
