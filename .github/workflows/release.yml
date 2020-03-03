@@ -6,21 +6,34 @@ on:
       - '*'
 
 jobs:
-
   release:
     strategy:
       matrix:
         go: [1.14]
 
-    runs-on: ubuntu-latest
-    container: golang:${{ matrix.go }}-stretch
+    runs-on: ubuntu-18.04
 
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go }}
+      - name: Add GOPATH/bin to PATH
+        # temporary fix
+        # see https://github.com/actions/setup-go/issues/14
+        run: |
+          set -euo pipefail
+          echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
+          echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
       - name: Build
         run: make
       - name: release
-        run: make release
+        run: |
+          make release
+          make publish-images
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}

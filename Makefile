@@ -12,15 +12,19 @@ export DATE
 
 default: tools check test build
 
-tools: $(shell go env GOPATH)/bin/golangci-lint $(shell go env GOPATH)/bin/goreleaser
+tools: $(shell go env GOPATH)/bin/golangci-lint $(shell go env GOPATH)/bin/goreleaser $(shell go env GOPATH)/bin/seihon
 
 $(shell go env GOPATH)/bin/golangci-lint:
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.23.6
 	golangci-lint --version
 
 $(shell go env GOPATH)/bin/goreleaser:
-	curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | bash -s -- -b "${GOPATH}/bin"
+	curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | bash -s -- -b $(shell go env GOPATH)/bin
 	goreleaser --version
+
+$(shell go env GOPATH)/bin/seihon:
+	curl -sfL https://raw.githubusercontent.com/ldez/seihon/master/godownloader.sh | bash -s -- -b $(shell go env GOPATH)/bin
+	seihon --version
 
 test:
 	go test -v -cover ./...
@@ -35,8 +39,9 @@ build: clean
 check:
 	golangci-lint run
 
-docker-image:
-	docker build -t containous/acme-fixer:$(VERSION) .
+publish-images:
+	echo "$(DOCKERHUB_PASSWORD)" | docker login -u "$(DOCKERHUB_USERNAME)" --password-stdin
+	seihon publish -v "$(VERSION)" -v "latest" --image-name="containous/acme-fixer" --dry-run=false
 
 release: tools
 	goreleaser release

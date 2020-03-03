@@ -1,21 +1,24 @@
+# Dockerfile template used by Seihon to create multi-arch images.
+# https://github.com/ldez/seihon
 FROM golang:1-alpine as builder
 
-RUN apk --no-cache --no-progress add git ca-certificates tzdata make \
-    && update-ca-certificates \
-    && rm -rf /var/cache/apk/*
+RUN apk --update upgrade \
+    && apk --no-cache --no-progress add git make ca-certificates tzdata
 
 WORKDIR /go/acme-fixer
+
+ENV GO111MODULE on
 
 # Download go modules
 COPY go.mod .
 COPY go.sum .
-RUN GO111MODULE=on go mod download
+RUN go mod download
 
 COPY . .
 
-RUN make build
+RUN GOARCH={{ .GoARCH }} GOARM={{ .GoARM }} make build
 
-FROM alpine:3.11
+FROM {{ .RuntimeImage }}
 
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/

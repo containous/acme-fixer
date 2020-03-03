@@ -3,17 +3,26 @@ name: Build
 on: [push]
 
 jobs:
-
   build:
     strategy:
       matrix:
         go: [1.14]
 
-    runs-on: ubuntu-latest
-    container: golang:${{ matrix.go }}-stretch
+    runs-on: ubuntu-18.04
 
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go }}
+      - name: Add GOPATH/bin to PATH
+        # temporary fix
+        # see https://github.com/actions/setup-go/issues/14
+        run: |
+          set -euo pipefail
+          echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
+          echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
       - name: Build
         run: make
