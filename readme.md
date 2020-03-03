@@ -1,6 +1,8 @@
 # acme-fixer
 
-[Documentation](./docs/acme-fixer.md)
+- [Binaries](https://github.com/containous/acme-fixer/releases)
+- [Docker image](https://hub.docker.com/r/containous/acme-fixer)
+- [Documentation](./docs/acme-fixer.md)
 
 ## Examples
 
