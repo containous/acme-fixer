@@ -4,6 +4,11 @@
 - [Docker image](https://hub.docker.com/r/containous/acme-fixer)
 - [Documentation](./docs/acme-fixer.md)
 
+Context:
+
+- https://community.letsencrypt.org/t/2020-02-29-caa-rechecking-bug/114591
+- https://community.containo.us/t/lets-encrypt-caa-bug/4746
+
 ## Examples
 
 ### Traefik v1
